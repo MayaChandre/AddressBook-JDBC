@@ -1,6 +1,7 @@
 package com.bridgelabz;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Person {
 
@@ -41,4 +42,19 @@ public class Person {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+        Person person = (Person) o;
+        return id == person.id &&
+                zip == person.zip &&
+                Objects.equals(firstName, person.firstName) &&
+                Objects.equals(lastName, person.lastName) &&
+                Objects.equals(city, person.city) &&
+                Objects.equals(state, person.state) &&
+                Objects.equals(phoneNumber, person.phoneNumber) &&
+                Objects.equals(emailId, person.emailId) &&
+                Objects.equals(startDate, person.startDate);
+    }
 }
