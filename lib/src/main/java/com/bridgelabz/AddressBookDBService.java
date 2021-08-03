@@ -1,6 +1,7 @@
 package com.bridgelabz;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddressBookDBService {
-
+	
 	private static AddressBookDBService addressBookDBService;
     private PreparedStatement addressBookDataStatement;
 
@@ -114,5 +115,24 @@ public class AddressBookDBService {
             e.printStackTrace();
         }
 
+    }
+
+    public List<Person> getAddressBookForDateRange(LocalDate startDate, LocalDate endDate) {
+        String sql = String.format("SELECT * FROM Person WHERE startDate BETWEEN '%s' AND '%s';",
+                Date.valueOf(startDate), Date.valueOf(endDate));
+        return this.getAddressBookDataUsingDB(sql);
+
+    }
+
+    private List<Person> getAddressBookDataUsingDB(String sql) {
+        List<Person> addressBookList = new ArrayList<>();
+        try (Connection connection = this.getConnection()) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            addressBookList = this.getPersonData(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return addressBookList;
     }
 }
